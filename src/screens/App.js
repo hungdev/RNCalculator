@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Text, View, StatusBar, SafeAreaView } from 'react-native';
 import styles from './styles/styles';
 import Button from '../components/Button';
-import { resizeFont, convertValue } from './Utils';
+import { resizeFont, convertValue, executeOperation } from './Utils';
 
 const defaultState = {
   currentValue: '0',
@@ -48,16 +48,18 @@ export class App extends Component {
   }
 
   handleOperator(value) {
-    const { currentValue, operator } = this.state;
-    if (operator !== value) {
-      this.setState({
-        operator: value,
-        previousValue: currentValue,
-        currentValue: '0',
-        tempDisplay: currentValue,
-        isEqual: false,
-      });
-    }
+    const { currentValue, previousValue, operator, isEqual } = this.state;
+    // if (operator !== value) {
+    this.setState({
+      operator: value,
+      previousValue: !previousValue
+        ? currentValue
+        : executeOperation(currentValue, previousValue, value).currentValue,
+      currentValue: '0',
+      tempDisplay: currentValue,
+      isEqual: false,
+    });
+    // }
   }
 
   handleNumber(value) {
@@ -85,43 +87,13 @@ export class App extends Component {
 
   handleEqual() {
     const { currentValue, previousValue, operator } = this.state;
-
-    const current = parseFloat(currentValue);
-    const previous = parseFloat(previousValue);
-    const resetState = {
+    this.setState({
+      ...executeOperation(currentValue, previousValue, operator),
       operator: null,
       previousValue: null,
       tempDisplay: null,
       isEqual: true,
-    };
-
-    if (operator === '/') {
-      this.setState({
-        currentValue: previous / current,
-        ...resetState,
-      });
-    }
-
-    if (operator === '*') {
-      this.setState({
-        currentValue: previous * current,
-        ...resetState,
-      });
-    }
-
-    if (operator === '+') {
-      this.setState({
-        currentValue: previous + current,
-        ...resetState,
-      });
-    }
-
-    if (operator === '-') {
-      this.setState({
-        currentValue: previous - current,
-        ...resetState,
-      });
-    }
+    });
   }
 
   render() {

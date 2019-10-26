@@ -1,5 +1,4 @@
 export function resizeFont(ch) {
-  console.log(ch, ch.toString().length);
   if (ch.toString().length === 7) {
     return { fontSize: 70 };
   }
@@ -15,8 +14,36 @@ export function resizeFont(ch) {
 }
 
 export function convertValue(value) {
-  console.log('value', value);
-  return value.toString().length > 9
-    ? Number.parseFloat(value).toExponential(2)
-    : parseFloat(value).toLocaleString();
+  return value > 999999999
+    ? Number.parseFloat(value).toExponential()
+    : parseFloat(value).toLocaleString('en', { maximumFractionDigits: 8 });
+}
+
+export function executeOperation(currentValue, previousValue, operator) {
+  const current = parseFloat(currentValue);
+  const previous = parseFloat(previousValue);
+
+  if (operator === '/') {
+    return {
+      currentValue: previous / current,
+    };
+  }
+
+  if (operator === '*') {
+    return {
+      currentValue: previous * current,
+    };
+  }
+
+  if (operator === '+') {
+    return {
+      currentValue: previous + current,
+    };
+  }
+
+  if (operator === '-') {
+    return {
+      currentValue: previous - current,
+    };
+  }
 }
