@@ -31,3 +31,10 @@ console.log(uniqArr);
 ```
 
 2. App programming
+
+<p align="center">
+  <img src="./assets/portrait.png" width='50%'/>
+</p>
+<p align="center">
+  <img src="./assets/landscape.png" width='100%'/>
+</p>
