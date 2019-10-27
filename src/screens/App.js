@@ -65,8 +65,7 @@ export class App extends Component {
   };
 
   handleOperator(value) {
-    const { currentValue, previousValue, operator, isEqual } = this.state;
-    // if (operator !== value) {
+    const { currentValue, previousValue, operator } = this.state;
     this.setState({
       operator: value,
       previousValue: !previousValue
@@ -78,7 +77,6 @@ export class App extends Component {
         : executeOperation(currentValue, previousValue, operator).currentValue,
       isEqual: false,
     });
-    // }
   }
 
   handleNumber(value) {
