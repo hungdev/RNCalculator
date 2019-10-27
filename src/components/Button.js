@@ -93,7 +93,7 @@ const styles = props => {
       width: screen.width / 5 - (isIphoneX() ? 30 : 10),
       flex: 0,
       alignItems: 'flex-start',
-      paddingLeft: isIphoneX() ? 25 : 10,
+      paddingLeft: isIphoneX() ? 25 : 20,
     },
     buttonLsSecondary: {
       color: '#060606',
