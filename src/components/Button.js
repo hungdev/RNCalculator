@@ -82,7 +82,7 @@ const styles = props => {
     buttonLs: {
       backgroundColor: '#333333',
       flex: 0,
-      height: Math.floor(buttonLsWidth - (isIphoneX() ? 35 : 30)),
+      height: Math.floor(buttonLsWidth - (isIphoneX() ? 35 : 20)),
       width: Math.floor(buttonLsWidth - (isIphoneX() ? 20 : 10)),
       alignItems: 'center',
       justifyContent: 'center',
