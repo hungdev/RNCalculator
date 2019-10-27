@@ -10,10 +10,11 @@ a.Sum of all odd number in array
 
 b.Sum of all unique odd number in array
 
-
+  ```
 function getSumOfOddNum(arr) {
   return arr.reduce((acc, cur) => cur % 2 ? (acc + cur) : acc, 0);
 }
+```
 
 Part a
 
