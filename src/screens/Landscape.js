@@ -13,11 +13,12 @@ function Landscape(props) {
         {template().map(e => (
           <Button
             key={e.id}
-            text={e.id}
+            text={e.text}
             size={e.size}
             type="ls"
             theme={e.theme}
-            onPress={() => { }}
+            onPress={() => {}}
+            screen={props.screen}
           />
         ))}
       </View>

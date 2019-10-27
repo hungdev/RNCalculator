@@ -24,12 +24,14 @@ export class App extends Component {
     this.state = {
       ...defaultState,
       orientation: isPortrait() ? 'portrait' : 'landscape',
+      screen: Dimensions.get('screen'),
     };
 
     // Event Listener for orientation changes
     Dimensions.addEventListener('change', () => {
       this.setState({
         orientation: isPortrait() ? 'portrait' : 'landscape',
+        screen: Dimensions.get('screen'),
       });
     });
   }
@@ -120,6 +122,7 @@ export class App extends Component {
       isClear,
       operator,
       orientation,
+      screen,
     } = this.state;
 
     return (
@@ -138,9 +141,10 @@ export class App extends Component {
                 currentValue={currentValue}
                 operator={operator}
                 onTapButton={this.onTapButton}
+                screen={screen}
               />
             ) : (
-              <Landscape />
+              <Landscape screen={screen} />
             )}
           </View>
         </SafeAreaView>
