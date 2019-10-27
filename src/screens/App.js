@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Text, View, StatusBar, SafeAreaView } from 'react-native';
+import { Text, View, StatusBar, SafeAreaView, Dimensions } from 'react-native';
 import styles from './styles/styles';
-import Button from '../components/Button';
-import { resizeFont, convertValue, executeOperation } from './Utils';
+import { executeOperation } from './Utils';
+import Portrait from './Portrait';
+import Landscape from './Landscape';
 
 const defaultState = {
   currentValue: '0',
@@ -16,10 +17,24 @@ const defaultState = {
 export class App extends Component {
   constructor(props) {
     super(props);
-    this.state = defaultState;
+    const isPortrait = () => {
+      const dim = Dimensions.get('screen');
+      return dim.height >= dim.width;
+    };
+    this.state = {
+      ...defaultState,
+      orientation: isPortrait() ? 'portrait' : 'landscape',
+    };
+
+    // Event Listener for orientation changes
+    Dimensions.addEventListener('change', () => {
+      this.setState({
+        orientation: isPortrait() ? 'portrait' : 'landscape',
+      });
+    });
   }
 
-  onTapButton(type, value) {
+  onTapButton = (type, value) => {
     const { currentValue } = this.state;
     switch (type) {
       case 'number':
@@ -45,7 +60,7 @@ export class App extends Component {
       default:
         return;
     }
-  }
+  };
 
   handleOperator(value) {
     const { currentValue, previousValue, operator, isEqual } = this.state;
@@ -54,9 +69,11 @@ export class App extends Component {
       operator: value,
       previousValue: !previousValue
         ? currentValue
-        : executeOperation(currentValue, previousValue, value).currentValue,
+        : executeOperation(currentValue, previousValue, operator).currentValue,
       currentValue: '0',
-      tempDisplay: currentValue,
+      tempDisplay: !previousValue
+        ? currentValue
+        : executeOperation(currentValue, previousValue, operator).currentValue,
       isEqual: false,
     });
     // }
@@ -97,83 +114,34 @@ export class App extends Component {
   }
 
   render() {
-    const { currentValue, tempDisplay, isClear, operator } = this.state;
+    const {
+      currentValue,
+      tempDisplay,
+      isClear,
+      operator,
+      orientation,
+    } = this.state;
 
     return (
-      <View style={styles.container}>
+      <View
+        style={[
+          styles.container,
+          orientation === 'landscape' ? { justifyContent: 'flex-start' } : {},
+        ]}>
         <StatusBar barStyle="light-content" />
         <SafeAreaView>
-          <Text style={[styles.value, resizeFont(tempDisplay || currentValue)]}>
-            {convertValue(tempDisplay || currentValue)}
-          </Text>
-          <View style={styles.row}>
-            <Button
-              text={isClear ? 'AC' : 'C'}
-              theme="secondary"
-              onPress={() => this.onTapButton('clear')}
-            />
-            <Button
-              text="+/_"
-              theme="secondary"
-              onPress={() => this.onTapButton('posneg')}
-            />
-            <Button
-              text="%"
-              theme="secondary"
-              onPress={() => this.onTapButton('percentage')}
-            />
-            <Button
-              text="÷"
-              textStyle={styles.textMulti}
-              onPress={() => this.onTapButton('operator', '/')}
-              theme={operator === '/' ? 'accentActive' : 'accent'}
-            />
-          </View>
-          <View style={styles.row}>
-            <Button text="7" onPress={() => this.onTapButton('number', 7)} />
-            <Button text="8" onPress={() => this.onTapButton('number', 8)} />
-            <Button text="9" onPress={() => this.onTapButton('number', 9)} />
-            <Button
-              text="×"
-              textStyle={styles.textMulti}
-              onPress={() => this.onTapButton('operator', '*')}
-              theme={operator === '*' ? 'accentActive' : 'accent'}
-            />
-          </View>
-          <View style={styles.row}>
-            <Button text="4" onPress={() => this.onTapButton('number', 4)} />
-            <Button text="5" onPress={() => this.onTapButton('number', 5)} />
-            <Button text="6" onPress={() => this.onTapButton('number', 6)} />
-            <Button
-              text="−"
-              textStyle={styles.textMulti}
-              theme={operator === '-' ? 'accentActive' : 'accent'}
-              onPress={() => this.onTapButton('operator', '-')}
-            />
-          </View>
-          <View style={styles.row}>
-            <Button text="1" onPress={() => this.onTapButton('number', 1)} />
-            <Button text="2" onPress={() => this.onTapButton('number', 2)} />
-            <Button text="3" onPress={() => this.onTapButton('number', 3)} />
-            <Button
-              text="+"
-              textStyle={styles.textMulti}
-              theme={operator === '+' ? 'accentActive' : 'accent'}
-              onPress={() => this.onTapButton('operator', '+')}
-            />
-          </View>
-          <View style={[styles.row, { marginBottom: 10 }]}>
-            <Button
-              text="0"
-              size="double"
-              onPress={() => this.onTapButton('number', 0)}
-            />
-            <Button text="." onPress={() => this.onTapButton()} />
-            <Button
-              text="="
-              theme="accent"
-              onPress={() => this.onTapButton('equal')}
-            />
+          <View>
+            {orientation === 'portrait' ? (
+              <Portrait
+                isClear={isClear}
+                tempDisplay={tempDisplay}
+                currentValue={currentValue}
+                operator={operator}
+                onTapButton={this.onTapButton}
+              />
+            ) : (
+              <Landscape />
+            )}
           </View>
         </SafeAreaView>
       </View>

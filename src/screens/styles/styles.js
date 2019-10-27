@@ -26,4 +26,17 @@ export default StyleSheet.create({
     fontSize: 35,
     fontWeight: '300',
   },
+  // ls
+  landscapeContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  landscapeWarpContent: {
+    height: '100%',
+    width: '100%',
+    // flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    paddingBottom: 10,
+  },
 });

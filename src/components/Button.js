@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity, Text, StyleSheet, Dimensions } from 'react-native';
+import { isIphoneX } from '../screens/Utils';
 const screen = Dimensions.get('window');
 const buttonWidth = screen.width / 4;
+const buttonLsWidth = screen.width / 10;
 
 export default function Button(props) {
-  const { size, theme, text, onPress, style, textStyle } = props;
+  console.log('ix', isIphoneX());
+  const { size, theme, text, onPress, style, textStyle, type } = props;
   return (
     <TouchableOpacity
       style={[
@@ -14,6 +17,10 @@ export default function Button(props) {
         theme === 'secondary' && styles.buttonSecondary,
         theme === 'accent' && styles.buttonAccent,
         theme === 'accentActive' && styles.buttonAccentActive,
+        type === 'ls' && styles.buttonLs,
+        size === 'lsDouble' && styles.buttonLsDouble,
+        theme === 'lsSecondary' && styles.buttonSecondary,
+        theme === 'lsAccent' && styles.buttonAccent,
         style,
       ]}
       onPress={onPress}>
@@ -64,5 +71,28 @@ const styles = StyleSheet.create({
   },
   textAccentActive: {
     color: '#f09a36',
+  },
+  buttonLs: {
+    backgroundColor: '#333333',
+    flex: 0,
+    height: Math.floor(buttonLsWidth - (isIphoneX() ? 35 : 30)),
+    width: Math.floor(buttonLsWidth - (isIphoneX() ? 20 : 10)),
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: Math.floor(buttonLsWidth),
+    margin: 5,
+  },
+  buttonLsDouble: {
+    width: screen.width / 5 - (isIphoneX() ? 30 : 10),
+    flex: 0,
+    alignItems: 'flex-start',
+    paddingLeft: isIphoneX() ? 20 : 10,
+  },
+  buttonLsSecondary: {
+    color: '#060606',
+    backgroundColor: '#a6a6a6',
+  },
+  buttonLsAccent: {
+    backgroundColor: '#f09a36',
   },
 });
